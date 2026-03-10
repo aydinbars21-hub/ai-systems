@@ -1,13 +1,486 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Systems Ödeme — Aydın Bars</title>
-    <!-- Complete HTML content will be added manually after commit -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Systems — Başvuru | Aydın Bars</title>
+<meta name="description" content="AI Systems programına başvurun. Aydın Bars tarafından sunulan yapay zeka ajan sistemi eğitimi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0a;--ink:#1c1c1e;--dim:#3a3a3c;--mid:#6c6c70;
+  --soft:#aeaeb2;--rule:#e5e5ea;--cloud:#f5f5f7;--fog:#fafafa;--white:#fff;
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-full:999px;
+  --sh-sm:0 2px 12px rgba(0,0,0,.06);
+  --sh-md:0 8px 32px rgba(0,0,0,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--fog);color:var(--black);font-size:15px;line-height:1.5;min-height:100vh}
+a{text-decoration:none;color:inherit}
+
+/* TOPBAR */
+.topbar{background:white;border-bottom:1px solid var(--rule);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;box-shadow:var(--sh-sm)}
+.tb-brand{display:flex;align-items:center;gap:9px;color:var(--black)}
+.tb-logo-mark{width:26px;height:26px;background:var(--black);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb-logo-text{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:-.3px}
+.tb-logo-text em{font-style:italic;font-weight:300;color:var(--mid)}
+.tb-steps{display:flex;align-items:center;gap:8px}
+.step{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--soft)}
+.step.active{color:var(--black);font-weight:700}
+.step.done{color:var(--mid)}
+.step-num{width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.step.active .step-num{background:var(--black);color:white;border-color:var(--black)}
+.step-div{width:20px;height:1px;background:var(--rule)}
+.tb-secure{font-size:12px;font-weight:500;color:var(--mid);display:flex;align-items:center;gap:5px}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--rule)}
+.progress-fill{height:100%;background:var(--black);width:0%;transition:width .4s ease}
+
+/* BACK LINK */
+.back-wrap{max-width:1000px;margin:0 auto;padding:20px 24px 0}
+.back-link{background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;color:var(--mid);display:inline-flex;align-items:center;gap:6px;transition:color .2s;text-decoration:none}
+.back-link:hover{color:var(--black)}
+
+/* PAGE LAYOUT */
+.page{max-width:1000px;margin:0 auto;padding:24px 24px 80px;display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+
+/* FORM CARD */
+.form-card{background:white;border-radius:var(--r-lg);border:1px solid var(--rule);box-shadow:var(--sh-sm);overflow:hidden}
+.form-head{padding:28px 32px 24px;border-bottom:1px solid var(--rule)}
+.form-head h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;letter-spacing:-.3px;margin-bottom:6px}
+.form-head p{font-size:13.5px;color:var(--mid);line-height:1.6}
+.form-body{padding:28px 32px}
+
+/* FORM FIELDS */
+.form-section{margin-bottom:24px}
+.form-section-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.form-section-lbl::after{content:'';flex:1;height:1px;background:var(--rule)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-row.single{grid-template-columns:1fr}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--dim);margin-bottom:6px}
+.field label span{color:var(--soft);font-weight:400}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;border:1.5px solid var(--rule);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--black);background:white;transition:border-color .2s,box-shadow .2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--black);box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.55}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* DISCOUNT */
+.discount-wrap{background:var(--fog);border:1px solid var(--rule);border-radius:var(--r-md);padding:16px 18px;margin-bottom:20px}
+.discount-label{font-size:12px;font-weight:700;color:var(--mid);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.discount-row{display:flex;gap:8px}
+.discount-row input{flex:1;padding:9px 12px;border:1.5px solid var(--rule);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;transition:border-color .2s}
+.discount-row input:focus{border-color:var(--black)}
+.discount-row button{padding:9px 16px;background:var(--black);color:white;border:none;border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s}
+.discount-row button:hover{background:var(--ink)}
+.discount-msg{font-size:13px;margin-top:8px;display:none}
+
+/* CHECKBOXES */
+.checkbox-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+.checkbox-row input[type="checkbox"]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--black);cursor:pointer}
+.checkbox-row label{font-size:13px;color:var(--mid);line-height:1.5;cursor:pointer}
+.checkbox-row label a{color:var(--black);text-decoration:underline;text-underline-offset:2px}
+
+/* SUBMIT BUTTON */
+.btn-submit{width:100%;padding:15px;border-radius:var(--r-full);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;background:var(--black);color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;box-shadow:0 4px 20px rgba(0,0,0,.2);margin-top:20px}
+.btn-submit:hover:not(:disabled){background:var(--ink);transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-submit svg{transition:transform .2s}
+.btn-submit:hover:not(:disabled) svg{transform:translateX(3px)}
+
+/* SUCCESS SCREEN */
+.success-screen{padding:56px 32px;text-align:center}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--black);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.success-h{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;margin-bottom:12px}
+.success-p{font-size:15px;color:var(--mid);line-height:1.7;max-width:360px;margin:0 auto 28px}
+.success-detail{background:var(--cloud);border-radius:var(--r-md);padding:18px 22px;text-align:left;margin:0 auto 24px;max-width:360px}
+.sd-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13.5px;border-bottom:1px solid var(--rule)}
+.sd-row:last-child{border-bottom:none}
+.sd-lbl{color:var(--mid);font-weight:500}
+.sd-val{color:var(--black);font-weight:600}
+.btn-mamopay{display:inline-flex;align-items:center;gap:10px;background:var(--black);color:white;padding:14px 32px;border-radius:var(--r-full);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+.btn-mamopay:hover{background:var(--ink);transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.success-note{font-size:12.5px;color:var(--soft)}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.sum-card{background:white;border-radius:var(--r-lg);border:1px solid var(--rule);box-shadow:var(--sh-sm);padding:24px}
+.sum-head{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-bottom:16px}
+.sum-pkg{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.sum-desc{font-size:13px;color:var(--mid);margin-bottom:18px;line-height:1.5}
+.sum-divider{height:1px;background:var(--rule);margin:16px 0}
+.sum-row{display:flex;align-items:flex-start;gap:11px;padding:8px 0}
+.sum-ico{width:28px;height:28px;border-radius:7px;background:var(--cloud);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--mid)}
+.sum-rn{font-size:13.5px;font-weight:600;color:var(--black)}
+.sum-rd{font-size:12px;color:var(--mid);margin-top:1px}
+.sum-rv{font-size:12.5px;font-weight:700;color:var(--black);margin-left:auto;flex-shrink:0}
+.sum-price-row{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 0;margin-top:4px;border-top:1px solid var(--rule)}
+.sum-price-lbl{font-size:13px;color:var(--mid)}
+.sum-price-val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--black)}
+.sum-price-note{font-size:11.5px;color:var(--soft);margin-top:4px;text-align:right}
+
+.bonus-card{background:var(--black);border-radius:var(--r-lg);padding:20px;border:1px solid rgba(255,255,255,.08)}
+.bonus-head{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px}
+.bonus-dot{width:6px;height:6px;border-radius:50%;background:white;opacity:.4}
+.bonus-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.7);line-height:1.5}
+.bonus-item:last-child{margin-bottom:0}
+.bonus-check{color:rgba(255,255,255,.4);flex-shrink:0;margin-top:2px}
+
+.trust-card{background:white;border-radius:var(--r-lg);border:1px solid var(--rule);padding:18px 20px}
+.str-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--mid);padding:6px 0}
+.str-item svg{color:var(--soft);flex-shrink:0}
+
+.alumni-card{background:var(--cloud);border-radius:var(--r-md);border:1px solid var(--rule);padding:16px 18px}
+.alumni-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
+.alumni-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--black)}
+.alumni-card p{font-size:12.5px;color:var(--mid);line-height:1.6}
+.alumni-card a{color:var(--black);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* MOBILE */
+@media(max-width:720px){
+  .page{grid-template-columns:1fr}
+  .sidebar{order:-1}
+  .form-row{grid-template-columns:1fr}
+  .topbar{padding:0 16px}
+  .tb-steps{display:none}
+  .back-wrap{padding:16px 16px 0}
+  .form-body{padding:20px}
+  .form-head{padding:20px 20px 16px}
+}
+</style>
 </head>
 <body>
-    <h1>AI Systems Ödeme Sayfası</h1>
-    <p>İçerik yükleniyor...</p>
+
+<!-- SVG ICONS -->
+<svg style="display:none" width="0" height="0"><defs>
+<symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-arr-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></symbol>
+<symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+</defs></svg>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="https://aydinbars.com" class="tb-brand">
+    <div class="tb-logo-mark"><svg viewBox="0 0 38 38" fill="none" width="14" height="14"><path d="M22 4L8 21H18L16 34L32 17H22L22 4Z" fill="white"/></svg></div>
+    <div class="tb-logo-text">Aydın <em>Bars</em></div>
+  </a>
+  <div class="tb-steps">
+    <div class="step active"><div class="step-num">1</div><span>Bilgiler</span></div>
+    <div class="step-div"></div>
+    <div class="step"><div class="step-num">2</div><span>Onay</span></div>
+    <div class="step-div"></div>
+    <div class="step"><div class="step-num">3</div><span>Ödeme</span></div>
+  </div>
+  <div class="tb-secure"><svg width="13" height="13"><use href="#i-lock"/></svg> 256-bit SSL Güvenli</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- BACK LINK -->
+<div class="back-wrap">
+  <a href="https://aydinbars.com" class="back-link"><svg width="14" height="14"><use href="#i-arr-l"/></svg> Ana sayfaya dön</a>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- FORM COLUMN -->
+  <div>
+    <!-- FORM CARD (visible initially) -->
+    <div class="form-card" id="formCard">
+      <div class="form-head">
+        <h2>AI Systems — Başvuru Formu</h2>
+        <p>Aşağıdaki bilgileri doldurun. Fiyat ve program detayları 24 saat içinde size iletilecektir.</p>
+      </div>
+      <div class="form-body">
+
+        <!-- Kişisel Bilgiler -->
+        <div class="form-section">
+          <div class="form-section-lbl">Kişisel Bilgiler</div>
+          <div class="form-row">
+            <div class="field"><label for="firstName">Ad <span>*</span></label><input type="text" id="firstName" placeholder="Adınız" autocomplete="given-name"></div>
+            <div class="field"><label for="lastName">Soyad <span>*</span></label><input type="text" id="lastName" placeholder="Soyadınız" autocomplete="family-name"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="email">E-posta <span>*</span></label><input type="email" id="email" placeholder="ornek@email.com" autocomplete="email"></div>
+            <div class="field"><label for="phone">Telefon <span>*</span></label><input type="tel" id="phone" placeholder="+90 5XX XXX XX XX" autocomplete="tel"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="country">Ülke <span>*</span></label>
+              <select id="country">
+                <option value="">Seçin...</option>
+                <option>Türkiye</option>
+                <option>Birleşik Arap Emirlikleri</option>
+                <option>Rusya</option>
+                <option>Kazakistan</option>
+                <option>Azerbaycan</option>
+                <option>Almanya</option>
+                <option>Hollanda</option>
+                <option>Polonya</option>
+                <option>İngiltere</option>
+                <option>Diğer</option>
+              </select>
+            </div>
+            <div class="field"><label for="city">Şehir</label><input type="text" id="city" placeholder="Şehriniz" autocomplete="address-level2"></div>
+          </div>
+        </div>
+
+        <!-- Profil -->
+        <div class="form-section">
+          <div class="form-section-lbl">Profiliniz</div>
+          <div class="form-row single">
+            <div class="field"><label for="role">Mevcut Durumunuz <span>*</span></label>
+              <select id="role">
+                <option value="">Seçin...</option>
+                <option>Ajans Sahibi</option>
+                <option>Serbest Danışman / Freelancer</option>
+                <option>Çalışan — Kendi işini kurmak istiyor</option>
+                <option>Girişimci</option>
+                <option>Diğer</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="field"><label for="alumni">Ajans.Start Elite Mezunu musunuz?</label>
+              <select id="alumni">
+                <option value="">Seçin...</option>
+                <option>Evet — Mezunum</option>
+                <option>Evet — Hâlâ devam ediyorum</option>
+                <option>Hayır</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="field"><label for="reason">Neden AI Systems? Kısaca anlatın. <span>*</span></label>
+              <textarea id="reason" placeholder="Hangi sorununuzu çözmek istiyorsunuz? Ne bekliyorsunuz programdan?" rows="4"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- İndirim Kodu -->
+        <div class="discount-wrap">
+          <div class="discount-label">Ajans.Start Elite Mezun İndirimi</div>
+          <div class="discount-row">
+            <input type="text" id="discountCode" placeholder="Mezun kodunuzu girin...">
+            <button onclick="applyDiscount()">Uygula</button>
+          </div>
+          <div class="discount-msg" id="discountMsg"></div>
+        </div>
+
+        <!-- Koşullar -->
+        <div class="checkbox-row">
+          <input type="checkbox" id="terms" onchange="toggleSubmit()">
+          <label for="terms"><a href="https://aydinbars.com/satis-sozlesmesi" target="_blank">Satış Sözleşmesi</a>'ni ve <a href="https://aydinbars.com/gizlilik" target="_blank">Gizlilik Politikası</a>'nı okudum, kabul ediyorum.</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="refund" onchange="toggleSubmit()">
+          <label for="refund">Dijital içerik niteliğinde olduğu için iade politikasını okudum ve kabul ediyorum.</label>
+        </div>
+
+        <button class="btn-submit" id="submitBtn" disabled onclick="submitForm()">
+          <svg width="16" height="16" style="color:rgba(255,255,255,.5)"><use href="#i-lock"/></svg>
+          Başvuruyu Gönder
+          <svg width="16" height="16"><use href="#i-arr"/></svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS CARD (hidden initially) -->
+    <div class="form-card" id="successCard" style="display:none">
+      <div class="success-screen">
+        <div class="success-icon"><svg width="28" height="28" style="color:white"><use href="#i-check"/></svg></div>
+        <h2 class="success-h">Başvurun Alındı!</h2>
+        <p class="success-p">Teşekkürler! 24 saat içinde program detayları ve fiyat bilgisi e-postana gelecek. Şimdi ödeme sayfasına geçebilirsin.</p>
+        <div class="success-detail" id="successDetail"></div>
+        <a href="https://business.mamopay.com/pay/barshubtechnologyfzc-dbafa5" target="_blank" class="btn-mamopay">
+          <svg width="16" height="16"><use href="#i-lock"/></svg>
+          Ödemeye Geç — Mamopay
+          <svg width="15" height="15"><use href="#i-arr"/></svg>
+        </a>
+        <p class="success-note">Güvenli ödeme altyapısı · Kart bilgileri saklanmaz</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- Order Summary -->
+    <div class="sum-card">
+      <div class="sum-head">Sipariş Özeti</div>
+      <div class="sum-pkg">AI Systems</div>
+      <div class="sum-desc">Tam AI ajan sistemi — web, reklam, CRM, WhatsApp, telefon otomasyonu</div>
+
+      <div class="sum-row">
+        <div class="sum-ico"><svg width="13" height="13"><use href="#i-zap"/></svg></div>
+        <div><div class="sum-rn">6 Modül AI Ajan Eğitimi</div><div class="sum-rd">Web · Reklam · WhatsApp · Telefon · CRM</div></div>
+        <div class="sum-rv">Dahil</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-ico"><svg width="13" height="13"><use href="#i-phone"/></svg></div>
+        <div><div class="sum-rn">Native Ses + Telefon AI</div><div class="sum-rd">7/24 gerçek sesli AI arama</div></div>
+        <div class="sum-rv">Dahil</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-ico"><svg width="13" height="13"><use href="#i-msg"/></svg></div>
+        <div><div class="sum-rn">WhatsApp · Telegram · Email</div><div class="sum-rd">Otomasyon + satış pipeline</div></div>
+        <div class="sum-rv">Dahil</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-ico"><svg width="13" height="13"><use href="#i-chart"/></svg></div>
+        <div><div class="sum-rn">AI Destekli CRM Kurulumu</div><div class="sum-rd">Lead → satış → kâr takibi</div></div>
+        <div class="sum-rv">Dahil</div>
+      </div>
+
+      <div class="sum-divider"></div>
+      <div class="sum-price-row">
+        <div class="sum-price-lbl">Program Ücreti</div>
+        <div>
+          <div class="sum-price-val" id="totalDisplay">Fiyat Bilgi E-postasında</div>
+          <div class="sum-price-note" id="totalNote">aydin@onedresulting.com</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bonus -->
+    <div class="bonus-card">
+      <div class="bonus-head"><div class="bonus-dot"></div>İlk Kayıt Bonusları</div>
+      <div class="bonus-item"><span class="bonus-check"><svg width="12" height="12"><use href="#i-check"/></svg></span>6 ay AI CRM erişimi (değer: 4.200€)</div>
+      <div class="bonus-item"><span class="bonus-check"><svg width="12" height="12"><use href="#i-check"/></svg></span>2 hazır iş planı + tam funnel (değer: 3.500€)</div>
+      <div class="bonus-item"><span class="bonus-check"><svg width="12" height="12"><use href="#i-check"/></svg></span>Inner Circle'a öncelikli başvuru hakkı</div>
+    </div>
+
+    <!-- Alumni -->
+    <div class="alumni-card">
+      <div class="alumni-tag">Ajans.Start Elite</div>
+      <p>Kursiyerler ve mezunlar için <strong>özel fiyat</strong> mevcut. Mezun indirim kodunuzu formdaki alana girin ya da <a href="mailto:aydin@onedresulting.com">doğrudan yazın</a>.</p>
+    </div>
+
+    <!-- Trust -->
+    <div class="trust-card">
+      <div class="str-item"><svg width="13" height="13"><use href="#i-shield"/></svg>256-bit SSL güvenli ödeme</div>
+      <div class="str-item"><svg width="13" height="13"><use href="#i-lock"/></svg>Kart bilgileriniz saklanmaz</div>
+      <div class="str-item"><svg width="13" height="13"><use href="#i-mail"/></svg>24 saat içinde bilgi e-postası</div>
+      <div class="str-item"><svg width="13" height="13"><use href="#i-phone"/></svg>WhatsApp: +90 212 909 91 05</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function applyDiscount(){
+  const code = document.getElementById('discountCode').value.trim().toUpperCase();
+  const msg = document.getElementById('discountMsg');
+  msg.style.display = 'block';
+  if(['ASEMEZUN2026','ASE2026','MEZUN','ELITE2026'].includes(code)){
+    msg.innerHTML = '<span style="color:#1a7f37;font-weight:600">✓ Kod uygulandı! Özel fiyatınız e-posta ile iletilecek.</span>';
+    document.getElementById('totalDisplay').textContent = 'Özel Mezun Fiyatı';
+    document.getElementById('totalNote').textContent = 'aydin@onedresulting.com';
+  } else if(!code){
+    msg.innerHTML = '<span style="color:var(--mid)">Lütfen bir kod girin.</span>';
+  } else {
+    msg.innerHTML = '<span style="color:#c0392b">Geçersiz kod. Mezunlar için: aydin@onedresulting.com</span>';
+  }
+}
+
+function toggleSubmit(){
+  const t = document.getElementById('terms').checked;
+  const r = document.getElementById('refund').checked;
+  document.getElementById('submitBtn').disabled = !(t && r);
+}
+
+function submitForm(){
+  const required = ['firstName','lastName','email','phone','country','role','reason'];
+  for(const id of required){
+    const el = document.getElementById(id);
+    if(!el || !el.value.trim()){
+      el.focus();
+      el.style.borderColor = '#c0392b';
+      setTimeout(()=>{ el.style.borderColor = ''; }, 2500);
+      alert('Lütfen tüm zorunlu alanları doldurun.');
+      return;
+    }
+  }
+  const email = document.getElementById('email').value.trim();
+  if(!email.includes('@') || !email.includes('.')){
+    alert('Geçerli bir e-posta adresi girin.');
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="16" height="16" class="spin" style="animation:spin .8s linear infinite"><use href="#i-zap"/></svg> Gönderiliyor...';
+
+  const fill = document.getElementById('progressFill');
+  let w = 0;
+  const iv = setInterval(()=>{ w = Math.min(w+6, 90); fill.style.width = w+'%'; }, 100);
+
+  const payload = {
+    paket: 'AI Systems',
+    ad: document.getElementById('firstName').value.trim(),
+    soyad: document.getElementById('lastName').value.trim(),
+    email: email,
+    telefon: document.getElementById('phone').value.trim(),
+    ulke: document.getElementById('country').value,
+    sehir: document.getElementById('city').value.trim(),
+    rol: document.getElementById('role').value,
+    mezun: document.getElementById('alumni').value,
+    neden: document.getElementById('reason').value.trim(),
+    mamopay_link: 'https://business.mamopay.com/pay/barshubtechnologyfzc-dbafa5',
+    tarih: new Date().toLocaleString('tr-TR')
+  };
+
+  fetch('https://hook.eu1.make.com/nda85u5rocpc2a8hr9eademzzu0wsh5p', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(()=>{
+    showSuccess(payload, fill, iv);
+  }).catch(()=>{
+    // Even if webhook fails, show success to user
+    showSuccess(payload, fill, iv);
+  });
+}
+
+function showSuccess(payload, fill, iv){
+  clearInterval(iv);
+  fill.style.width = '100%';
+
+  // Update stepper
+  document.querySelectorAll('.step')[0].classList.remove('active');
+  document.querySelectorAll('.step')[0].classList.add('done');
+  document.querySelectorAll('.step')[1].classList.add('active');
+
+  setTimeout(()=>{
+    document.getElementById('formCard').style.display = 'none';
+    const sc = document.getElementById('successCard');
+    sc.style.display = 'block';
+
+    document.getElementById('successDetail').innerHTML = `
+      <div class="sd-row"><span class="sd-lbl">Ad Soyad</span><span class="sd-val">${payload.ad} ${payload.soyad}</span></div>
+      <div class="sd-row"><span class="sd-lbl">E-posta</span><span class="sd-val">${payload.email}</span></div>
+      <div class="sd-row"><span class="sd-lbl">Program</span><span class="sd-val">AI Systems</span></div>
+      <div class="sd-row"><span class="sd-lbl">Durum</span><span class="sd-val" style="color:#1a7f37">✓ Başvuru Alındı</span></div>
+    `;
+  }, 600);
+}
+
+// Spin animation for loading
+const style = document.createElement('style');
+style.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+</script>
 </body>
 </html>
