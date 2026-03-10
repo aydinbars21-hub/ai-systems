@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Systems — Aydın Bars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#0a0a0a;--ink:#1c1c1e;--dim:#3a3a3c;--mid:#6c6c70;
+  --soft:#aeaeb2;--rule:#e5e5ea;--cloud:#f5f5f7;--fog:#fafafa;--white:#ffffff;
+  --r-sm:10px;--r-md:16px;--r-lg:24px;--r-xl:32px;--r-2xl:40px;--r-full:999px;
+  --sh-sm:0 4px 16px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.03);
+  --sh-md:0 12px 40px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.04);
+  --sh-lg:0 24px 64px rgba(0,0,0,.13),0 4px 16px rgba(0,0,0,.05);
+  --sh-xl:0 40px 100px rgba(0,0,0,.17),0 8px 32px rgba(0,0,0,.07);
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--white);color:var(--black);overflow-x:hidden;font-size:16px;line-height:1.5}
+a{text-decoration:none}
+.cg{font-family:'Cormorant Garamond',Georgia,serif}
+.cg-i{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:54px;background:rgba(255,255,255,.82);backdrop-filter:saturate(200%) blur(24px);-webkit-backdrop-filter:saturate(200%) blur(24px);border-bottom:1px solid rgba(0,0,0,.07)}
+.nav-in{max-width:1200px;margin:0 auto;height:100%;padding:0 36px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--black)}
+.nav-mark{width:32px;height:32px;background:var(--black);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.nav-name{font-size:15px;font-weight:700;letter-spacing:-.4px;display:flex;align-items:baseline;gap:5px}
+.nav-name sub{font-weight:400;color:var(--soft);font-size:13px}
+.nav-links{display:flex;gap:28px;list-style:none;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--mid);transition:color .2s}
+.nav-links a:hover{color:var(--black)}
+.nav-end{display:flex;align-items:center;gap:8px}
+.btn-ghost{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;color:var(--mid);background:none;border:none;cursor:pointer;padding:8px 14px;border-radius:var(--r-full);transition:all .2s}
+.btn-ghost:hover{color:var(--black);background:var(--cloud)}
+.btn-pill{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;background:var(--black);color:var(--white);border:none;cursor:pointer;padding:9px 22px;border-radius:var(--r-full);display:inline-flex;align-items:center;gap:6px;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.btn-pill:hover{background:var(--ink);transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,0,0,.25)}
+
+/* ── BAND ── */
+.band{position:fixed;top:54px;left:0;right:0;z-index:999;background:var(--black);padding:8px 0;overflow:hidden}
+.band-track{display:flex;gap:52px;white-space:nowrap;animation:band 32s linear infinite}
+.band-item{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.65);flex-shrink:0}
+.band-sep{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.2)}
+@keyframes band{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── HERO ── */
+.hero{padding-top:122px;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,0,0,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.022) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 70% 70% at 50% 40%,black 30%,transparent 100%)}
+.hero-glow{position:absolute;top:8%;right:4%;width:520px;height:520px;background:radial-gradient(circle,rgba(0,0,0,.032) 0%,transparent 65%);filter:blur(60px);pointer-events:none;animation:glow 7s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.08)}}
+.hero-in{max-width:1200px;margin:0 auto;padding:60px 36px 100px;width:100%;position:relative;z-index:2;display:grid;grid-template-columns:1fr 460px;gap:80px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--soft);margin-bottom:30px;opacity:0;animation:up .8s .1s var(--ease) forwards}
+.ew-dash{width:28px;height:1px;background:var(--rule)}
+.hero-h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(56px,7vw,92px);font-weight:700;letter-spacing:-.02em;line-height:.97;margin-bottom:30px;opacity:0;animation:up .9s .2s var(--ease) forwards}
+.hero-h1 .dim{color:var(--mid);font-weight:400}
+.hero-h1 .it{font-style:italic}
+.hero-body{font-size:17.5px;font-weight:400;color:var(--mid);line-height:1.7;max-width:520px;margin-bottom:40px;opacity:0;animation:up .9s .32s var(--ease) forwards}
+.hero-body strong{color:var(--black);font-weight:600}
+.hero-btns{display:flex;align-items:center;gap:14px;flex-wrap:wrap;opacity:0;animation:up .9s .44s var(--ease) forwards}
+.btn-hero{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.2px;background:var(--black);color:var(--white);border:none;cursor:pointer;padding:15px 36px;border-radius:var(--r-full);display:inline-flex;align-items:center;gap:8px;transition:all .25s var(--ease);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3);background:var(--ink)}
+.btn-link{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:var(--mid);background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:color .2s}
+.btn-link:hover{color:var(--black)}
+.link-arr{transition:transform .2s var(--spring);display:inline-flex}
+.btn-link:hover .link-arr{transform:translateX(3px)}
+.hero-trust{display:flex;align-items:center;gap:18px;margin-top:28px;opacity:0;animation:up .9s .56s var(--ease) forwards}
+.trust-it{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--soft)}
+.trust-sep{width:4px;height:4px;border-radius:50%;background:var(--rule)}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* HERO VISUAL */
+.hero-vis{position:relative;height:540px;opacity:0;animation:up 1s .38s var(--ease) forwards}
+.glass{background:rgba(255,255,255,.78);backdrop-filter:saturate(200%) blur(28px);-webkit-backdrop-filter:saturate(200%) blur(28px);border:1px solid rgba(255,255,255,.95);border-radius:var(--r-lg);box-shadow:var(--sh-lg),inset 0 1px 0 rgba(255,255,255,.85)}
+.card-main{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:278px;background:var(--black);border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:28px 24px;box-shadow:var(--sh-xl)}
+.cm-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.cm-name{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.cm-live{display:flex;align-items:center;gap:5px}
+.cm-dot{width:6px;height:6px;border-radius:50%;background:#32d74b;animation:blink 2s infinite}
+.cm-live-txt{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#32d74b}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.cm-lbl{font-size:10px;color:rgba(255,255,255,.32);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.cm-val{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:22px}
+.cm-rows{display:flex;flex-direction:column;gap:7px}
+.cm-row{background:rgba(255,255,255,.055);border-radius:10px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center}
+.cm-rn{font-size:12px;color:rgba(255,255,255,.65);font-weight:500}
+.cm-tag{font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 8px;border-radius:100px}
+.cm-tag.on{background:rgba(50,215,75,.12);color:#32d74b}
+.cm-tag.ai{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+.fc{position:absolute;padding:15px 17px;animation:flt 5s ease-in-out infinite}
+.fc1{width:170px;top:28px;right:-16px;animation-delay:0s}
+.fc2{width:158px;top:72px;left:-24px;animation-delay:1.7s}
+.fc3{width:164px;bottom:90px;right:-24px;animation-delay:.9s}
+.fc4{width:156px;bottom:36px;left:-20px;animation-delay:2.3s}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.fc-icon{margin-bottom:9px;color:var(--mid)}
+.fc-lbl{font-size:10px;color:var(--soft);font-weight:600;letter-spacing:.5px;margin-bottom:3px}
+.fc-val{font-size:14px;font-weight:700;color:var(--black);letter-spacing:-.3px}
+.fc-val.g{color:#1a7f37}
+
+/* ── STATS ── */
+.stats-bar{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--cloud)}
+.stats-grid{max-width:1200px;margin:0 auto;padding:0 36px;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-cell{padding:36px 28px;border-right:1px solid var(--rule);transition:background .2s}
+.stat-cell:last-child{border-right:none}
+.stat-cell:hover{background:rgba(0,0,0,.015)}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;letter-spacing:-2px;color:var(--black);line-height:1}
+.stat-u{font-size:38px;font-weight:400;color:var(--soft)}
+.stat-l{font-size:13px;color:var(--mid);margin-top:7px;font-weight:400}
+
+/* ── SECTION ── */
+.section{padding:120px 36px;max-width:1200px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--soft);margin-bottom:22px}
+.eyebrow::before{content:'';display:block;width:22px;height:1px;background:var(--rule)}
+.sec-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.2vw,56px);font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-bottom:20px}
+.sec-h .it{font-style:italic;font-weight:600}
+.sec-b{font-size:17px;color:var(--mid);line-height:1.68;max-width:560px;font-weight:400}
+.sec-b strong{color:var(--black);font-weight:600}
+
+/* ── PROBLEM ── */
+.prob-bg{background:var(--cloud)}
+.prob-in{max-width:1200px;margin:0 auto;padding:120px 36px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.prob-in p{font-size:16px;color:var(--mid);line-height:1.78;margin-bottom:18px;max-width:460px}
+.prob-in strong{color:var(--black);font-weight:600}
+.blockquote{margin-top:36px;padding:30px 32px;background:var(--black);border-radius:var(--r-xl);box-shadow:var(--sh-md)}
+.blockquote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:rgba(255,255,255,.88);line-height:1.55;margin-bottom:16px}
+.bq-attr{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.pain-list{display:flex;flex-direction:column;gap:1px}
+.pain-row{background:var(--white);padding:22px 26px;display:flex;gap:18px;align-items:flex-start;border-left:2px solid transparent;transition:all .2s;cursor:default}
+.pain-row:first-child{border-radius:var(--r-lg) var(--r-lg) 0 0}
+.pain-row:last-child{border-radius:0 0 var(--r-lg) var(--r-lg)}
+.pain-row:hover{border-left-color:var(--black);padding-left:24px}
+.pain-n{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--rule);min-width:28px;line-height:1;padding-top:2px}
+.pain-row h4{font-size:14.5px;font-weight:700;margin-bottom:5px}
+.pain-row p{font-size:13px;color:var(--mid);line-height:1.6}
+
+/* ── FEATURES ── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r-2xl);overflow:hidden;margin-top:60px}
+.feat-cell{background:var(--white);padding:36px;transition:background .2s}
+.feat-cell:hover{background:var(--fog)}
+.feat-cell.dk{background:var(--black)}
+.feat-cell.dk:hover{background:var(--ink)}
+.feat-cell.w2{grid-column:span 2}
+.feat-cell.w3{grid-column:span 3}
+.feat-ib{width:46px;height:46px;border-radius:13px;border:1px solid var(--rule);background:var(--white);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--mid)}
+.feat-cell.dk .feat-ib{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.09);color:rgba(255,255,255,.6)}
+.feat-tag{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--soft);border:1px solid var(--rule);padding:4px 10px;border-radius:100px;margin-bottom:14px}
+.feat-cell.dk .feat-tag{color:rgba(255,255,255,.28);border-color:rgba(255,255,255,.1)}
+.feat-cell h3{font-size:17px;font-weight:700;letter-spacing:-.3px;margin-bottom:9px}
+.feat-cell.dk h3{color:var(--white)}
+.feat-cell p{font-size:13.5px;color:var(--mid);line-height:1.65}
+.feat-cell.dk p{color:rgba(255,255,255,.48)}
+.feat-note{margin-top:20px;padding:14px 18px;background:rgba(255,255,255,.055);border-radius:var(--r-sm);font-size:13px;color:rgba(255,255,255,.55);line-height:1.55}
+.feat-note strong{color:rgba(255,255,255,.88)}
+.feat-big{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;letter-spacing:-4px;line-height:1;color:rgba(255,255,255,.07);margin-top:18px;display:block}
+/* Capability list cell */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 24px;margin-top:14px}
+.cap-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--dim);line-height:1.4}
+.feat-cell.dk .cap-item{color:rgba(255,255,255,.6)}
+
+/* ── BA ── */
+.ba-bg{background:var(--cloud)}
+.ba-in{max-width:1200px;margin:0 auto;padding:120px 36px}
+.ba-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+.ba-panel{border-radius:var(--r-2xl);padding:44px 40px}
+.ba-before{background:var(--white);border:1px solid var(--rule)}
+.ba-after{background:var(--black)}
+.ba-head{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:30px;display:flex;align-items:center;gap:10px}
+.ba-before .ba-head{color:var(--soft)}
+.ba-after  .ba-head{color:rgba(255,255,255,.28)}
+.ba-items{display:flex;flex-direction:column;gap:15px}
+.ba-item{display:flex;gap:14px;align-items:flex-start;font-size:15px;line-height:1.5}
+.ba-before .ba-item{color:var(--mid)}
+.ba-after  .ba-item{color:rgba(255,255,255,.78)}
+.ba-ico{flex-shrink:0;margin-top:1px}
+
+/* ── PACKAGES (2 packages, featured side by side) ── */
+.pkg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:60px;max-width:860px}
+.pkg{border:1px solid var(--rule);border-radius:var(--r-2xl);padding:40px 34px;background:var(--white);display:flex;flex-direction:column;transition:all .25s var(--ease);position:relative;overflow:hidden}
+.pkg::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:var(--rule);transition:background .3s}
+.pkg:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.pkg:hover::after{background:var(--black)}
+.pkg.star{background:var(--black);border-color:var(--black);box-shadow:var(--sh-xl)}
+.pkg.star::after{background:rgba(255,255,255,.15)}
+.pkg.star:hover{transform:translateY(-8px);box-shadow:0 48px 120px rgba(0,0,0,.22)}
+.pkg-badge{display:inline-flex;align-items:center;gap:7px;font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--soft);margin-bottom:24px}
+.pkg.star .pkg-badge{color:rgba(255,255,255,.35)}
+.pkg-dot{width:5px;height:5px;border-radius:50%;background:var(--soft)}
+.pkg.star .pkg-dot{background:rgba(255,255,255,.35);animation:blink 2s infinite}
+.pkg-name{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+.pkg.star .pkg-name{color:var(--white)}
+.pkg-desc{font-size:13.5px;color:var(--mid);line-height:1.65;margin-bottom:28px}
+.pkg.star .pkg-desc{color:rgba(255,255,255,.48)}
+.pkg-line{height:1px;background:var(--rule);margin-bottom:24px}
+.pkg.star .pkg-line{background:rgba(255,255,255,.09)}
+.pkg-feats{display:flex;flex-direction:column;gap:12px;flex:1}
+.pkg-feat{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:var(--dim)}
+.pkg.star .pkg-feat{color:rgba(255,255,255,.75)}
+.pkg-feat.em{font-weight:600;color:var(--black)}
+.pkg.star .pkg-feat.em{color:rgba(255,255,255,.95)}
+.pkg-fi{flex-shrink:0;margin-top:1px}
+.pkg-cta{margin-top:30px}
+.pkg-btn{width:100%;padding:14px;border-radius:var(--r-full);font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--rule);background:none;color:var(--black);transition:all .2s;display:block;text-align:center;text-decoration:none}
+.pkg-btn:hover{border-color:var(--black);background:var(--black);color:white}
+.pkg.star .pkg-btn{background:white;color:var(--black);border-color:white}
+.pkg.star .pkg-btn:hover{background:var(--cloud)}
+.pkg-note{margin-top:12px;font-size:11.5px;color:var(--soft);text-align:center}
+.pkg.star .pkg-note{color:rgba(255,255,255,.28)}
+/* Ajans.Start Elite discount badge */
+.discount-bar{background:var(--cloud);border:1px solid var(--rule);border-radius:var(--r-lg);padding:18px 24px;margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.db-label{font-size:12px;font-weight:700;color:var(--dim)}
+.db-tag{background:var(--black);color:white;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:4px 12px;border-radius:100px}
+.db-desc{font-size:12px;color:var(--mid);flex:1}
+
+/* ── VALUE TABLE ── */
+.val-bg{background:var(--cloud)}
+.val-in{max-width:860px;margin:0 auto;padding:120px 36px;text-align:center}
+.val-table{border:1px solid var(--rule);border-radius:var(--r-2xl);overflow:hidden;background:var(--white);box-shadow:var(--sh-sm);margin-top:56px;text-align:left}
+.vt-row{display:flex;justify-content:space-between;align-items:center;padding:22px 32px;border-bottom:1px solid var(--rule);gap:20px;flex-wrap:wrap;transition:background .15s}
+.vt-row:last-child{border-bottom:none}
+.vt-row:hover{background:var(--fog)}
+.vt-l{display:flex;align-items:center;gap:16px}
+.vt-ico{width:30px;height:30px;border-radius:100%;background:var(--black);color:white;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vt-ico.soft{background:var(--cloud);color:var(--dim)}
+.vt-title{font-size:14.5px;font-weight:700;margin-bottom:2px}
+.vt-desc{font-size:12px;color:var(--mid)}
+.vt-r{text-align:right;flex-shrink:0}
+.vt-old{font-size:12px;color:var(--soft);text-decoration:line-through}
+.vt-new{font-size:14px;font-weight:700}
+.val-bot{margin-top:18px;background:var(--black);border-radius:var(--r-2xl);padding:38px 48px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.vb-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.vb-old{font-size:15px;color:rgba(255,255,255,.22);text-decoration:line-through;margin-bottom:4px}
+.vb-r{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sc-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);font-size:12px;font-weight:600;padding:10px 18px;border-radius:var(--r-full)}
+.sc-dot{width:7px;height:7px;background:#ff3b30;border-radius:50%;animation:blink 1.5s infinite}
+.btn-white{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;background:var(--white);color:var(--black);border:none;cursor:pointer;padding:15px 36px;border-radius:var(--r-full);display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.25);text-decoration:none}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+
+/* ── TESTIMONIALS ── */
+.testi-cols{columns:3;gap:14px;margin-top:56px}
+.testi-card{break-inside:avoid;margin-bottom:14px;background:var(--cloud);border-radius:var(--r-lg);padding:26px;transition:transform .2s;border:1px solid var(--rule)}
+.testi-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
+.testi-stars{display:flex;gap:3px;margin-bottom:14px;color:var(--black)}
+.testi-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--black);line-height:1.7;margin-bottom:20px}
+.testi-au{display:flex;align-items:center;gap:11px}
+.testi-av{width:36px;height:36px;border-radius:100%;flex-shrink:0;background:var(--black);color:white;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:-.5px;overflow:hidden}
+.testi-av-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.testi-av-img{width:100%;height:100%;object-fit:cover;display:none}
+.testi-role{font-size:13px;font-weight:600;color:var(--black);margin-bottom:1px}
+.testi-title{font-size:12px;color:var(--mid)}
+
+/* ── FOR WHO ── */
+.fw-bg{background:var(--cloud)}
+.fw-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:56px}
+.fw{border-radius:var(--r-2xl);padding:40px 36px}
+.fw.yes{background:var(--black)}
+.fw.no{background:var(--white);border:1px solid var(--rule)}
+.fw-head{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.fw.yes .fw-head{color:rgba(255,255,255,.3)}
+.fw.no  .fw-head{color:var(--soft)}
+.fw-items{display:flex;flex-direction:column;gap:14px}
+.fw-item{display:flex;gap:13px;align-items:flex-start;font-size:15px;line-height:1.5}
+.fw.yes .fw-item{color:rgba(255,255,255,.78)}
+.fw.no  .fw-item{color:var(--mid)}
+
+/* ── FAQ ── */
+.faq-in{max-width:740px;margin:56px auto 0}
+.faq-item{border-bottom:1px solid var(--rule)}
+.faq-item:first-child{border-top:1px solid var(--rule)}
+.faq-q{padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;font-size:15.5px;font-weight:600;letter-spacing:-.3px;user-select:none;transition:color .2s}
+.faq-q:hover{color:var(--dim)}
+.faq-tog{width:30px;height:30px;border-radius:100%;flex-shrink:0;background:var(--cloud);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;transition:all .3s var(--spring);color:var(--dim)}
+.faq-item.open .faq-tog{background:var(--black);border-color:var(--black);color:white;transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+.faq-ab{padding:0 0 22px;font-size:14.5px;color:var(--mid);line-height:1.78;max-width:620px}
+.faq-item.open .faq-a{max-height:300px}
+
+/* ── CTA FINAL ── */
+.cta{margin:0 28px 80px;background:var(--black);border-radius:36px;padding:80px 64px;overflow:hidden;position:relative;display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
+.cta::before{content:'';position:absolute;top:-120px;right:-120px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);border-radius:50%}
+.cta-ey{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.cta-ey::before{content:'';width:20px;height:1px;background:rgba(255,255,255,.18);display:block}
+.cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,3.8vw,56px);font-weight:700;letter-spacing:-.02em;line-height:1.05;color:white;margin-bottom:18px}
+.cta h2 .it{font-style:italic}
+.cta p{font-size:16.5px;color:rgba(255,255,255,.48);line-height:1.65;max-width:520px}
+.cta p strong{color:rgba(255,255,255,.78);font-weight:600}
+.cta-r{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:13px}
+.cta-note{font-size:11.5px;color:rgba(255,255,255,.28);text-align:right}
+
+/* ── FOOTER ── */
+.foot{border-top:1px solid var(--rule);padding:56px 36px 40px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px}
+.foot-bn{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.foot-bn span{font-size:15px;font-weight:700;letter-spacing:-.4px}
+.foot-bn sub{font-size:13px;font-weight:400;color:var(--soft)}
+.foot-tag{font-size:13.5px;color:var(--mid);max-width:280px;line-height:1.65;margin-bottom:20px}
+.foot-soc{display:flex;gap:7px}
+.fsoc{width:34px;height:34px;border-radius:9px;border:1px solid var(--rule);background:none;display:flex;align-items:center;justify-content:center;color:var(--mid);transition:all .2s;cursor:pointer;text-decoration:none}
+.fsoc:hover{background:var(--black);border-color:var(--black);color:white}
+.foot-col h5{font-size:11.5px;font-weight:700;letter-spacing:.5px;margin-bottom:16px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.foot-col ul li a{font-size:13.5px;color:var(--mid);transition:color .2s}
+.foot-col ul li a:hover{color:var(--black)}
+.foot-company{font-size:12px;color:var(--soft);line-height:1.8}
+.foot-company a{color:var(--mid);transition:color .2s}
+.foot-company a:hover{color:var(--black)}
+.foot-base{border-top:1px solid var(--rule);padding:18px 36px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.foot-base span{font-size:12px;color:var(--soft)}
+.wm{background:var(--black);padding:44px 0;overflow:hidden;text-align:center}
+.wm-txt{font-family:'Cormorant Garamond',serif;font-size:clamp(80px,15vw,200px);font-weight:700;letter-spacing:-6px;color:rgba(255,255,255,.06);line-height:1;user-select:none;white-space:nowrap}
+.wm-base{background:var(--black);padding:14px 36px 22px;max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.22)}
+
+/* ── REVEAL ── */
+.rev{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rev.on{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:980px){
+  .nav-links{display:none}
+  .hero-in{grid-template-columns:1fr}
+  .hero-vis{display:none}
+  .prob-in{grid-template-columns:1fr;gap:48px}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .feat-cell.w2,.feat-cell.w3{grid-column:span 2}
+  .ba-panels,.pkg-grid,.fw-grid{grid-template-columns:1fr}
+  .testi-cols{columns:2}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--rule)}
+  .cta{grid-template-columns:1fr;padding:48px 36px;margin:0 18px 60px}
+  .cta-r{align-items:flex-start}
+  .foot{grid-template-columns:1fr 1fr}
+  .cap-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .nav-in{padding:0 20px}
+  .section{padding:80px 20px}
+  .feat-grid{grid-template-columns:1fr}
+  .feat-cell.w2,.feat-cell.w3{grid-column:span 1}
+  .testi-cols{columns:1}
+  .foot{grid-template-columns:1fr;padding:40px 20px}
+  .foot-base,.wm-base{padding:14px 20px}
+  .cta{padding:40px 24px;margin:0 12px 48px}
+  .val-bot{padding:28px 24px;flex-direction:column;align-items:flex-start}
+  .cap-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SVG ICONS ═══ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<defs>
+<symbol id="i-zap" viewBox="0 0 20 20" fill="none"><path d="M11.5 2L4 11h7l-2.5 7L18 9h-7l.5-7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-arr" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-arr-sm" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-plus" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="i-check" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5 6.5-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-x" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="i-shield" viewBox="0 0 20 20" fill="none"><path d="M10 2l7 3v5c0 4.2-3.1 7.3-7 8-3.9-.7-7-3.8-7-8V5l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-phone" viewBox="0 0 20 20" fill="none"><path d="M3 4a1 1 0 011-1h2.5l1 3-1.5 1.5a11 11 0 005.5 5.5L13 11.5l3 1V15a1 1 0 01-1 1A14 14 0 013 4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-bot" viewBox="0 0 20 20" fill="none"><rect x="3" y="7" width="14" height="10" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="7.5" cy="12" r="1.5" fill="currentColor"/><circle cx="12.5" cy="12" r="1.5" fill="currentColor"/><path d="M10 7V4M7 4h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-cpu" viewBox="0 0 20 20" fill="none"><rect x="5" y="5" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="8" width="4" height="4" rx=".5" fill="currentColor" opacity=".3"/><path d="M5 8H3M5 12H3M15 8h2M15 12h2M8 5V3M12 5V3M8 15v2M12 15v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-img" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 14l4-4 3 3 2-2 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-msg" viewBox="0 0 20 20" fill="none"><path d="M3 5a2 2 0 012-2h10a2 2 0 012 2v7a2 2 0 01-2 2H7l-4 3V5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="i-globe" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="3.5" ry="7" stroke="currentColor" stroke-width="1.5"/><path d="M3 10h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-chart" viewBox="0 0 20 20" fill="none"><path d="M3 15V9l4-2v8M9 15V6l4-2v11M15 15V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-spark" viewBox="0 0 20 20" fill="none"><path d="M10 2v3M10 15v3M2 10h3M15 10h3M4.9 4.9l2 2M13.1 13.1l2 2M4.9 15.1l2-2M13.1 6.9l2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/></symbol>
+<symbol id="i-layers" viewBox="0 0 20 20" fill="none"><path d="M2 8l8-5 8 5-8 5-8-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2 12l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-diamond" viewBox="0 0 20 20" fill="none"><path d="M10 17L3 10l7-8 7 8-7 7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 10h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-ban" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 6.5l7 7M13.5 6.5l-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-star" viewBox="0 0 14 14"><path d="M7 1l1.7 3.4L12.5 5 10 7.4l.6 3.6L7 9.4l-3.6 1.6.6-3.6L1.5 5l3.8-.6L7 1z" fill="currentColor"/></symbol>
+<symbol id="i-ccheck" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mail" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 7l7 5 7-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-doc" viewBox="0 0 20 20" fill="none"><path d="M5 3h7l4 4v10a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 3v4h4M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-video" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M14 8.5l4-2v7l-4-2v-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="i-translate" viewBox="0 0 20 20" fill="none"><path d="M3 5h9M7 3v2M5 8c.8 2 2.5 4 4.5 5M9 8c-.8 2-2 3.5-3.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 13l2-5 2 5M11.8 11.5h2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-search" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-settings" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M5 5l1 1M14 14l1 1M5 15l1-1M14 6l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="i-report" viewBox="0 0 20 20" fill="none"><path d="M3 4a1 1 0 011-1h8l4 4v9a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" stroke="currentColor" stroke-width="1.5"/><path d="M11 3v4h4M6 10h4M6 13h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+</defs>
+</svg>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-in">
+    <a href="#" class="nav-logo">
+      <div class="nav-mark"><svg width="17" height="17" style="color:white"><use href="#i-zap"/></svg></div>
+      <div class="nav-name">AI Systems <sub>by Aydın Bars</sub></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Program</a></li>
+      <li><a href="#packages">Paketler</a></li>
+      <li><a href="#testimonials">Başarılar</a></li>
+      <li><a href="#faq">SSS</a></li>
+    </ul>
+    <div class="nav-end">
+      <button class="btn-ghost">Hakkımda</button>
+      <a href="#packages" class="btn-pill">Başvur <svg width="12" height="12"><use href="#i-arr-sm"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<!-- BAND -->
+<div class="band">
+  <div class="band-track">
+    <div class="band-item"><svg width="11" height="11"><use href="#i-zap"/></svg>Sınırlı Kontenjan</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-spark"/></svg>İlk Katılanlara AI CRM 6 Ay Ücretsiz</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-shield"/></svg>Fiyat Yakında Artıyor</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-phone"/></svg>Native Ses + Telefon AI</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-layers"/></svg>2 Hazır İş Planı Dahil</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-diamond"/></svg>Inner Circle Kapısı</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-zap"/></svg>Sınırlı Kontenjan</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-spark"/></svg>İlk Katılanlara AI CRM 6 Ay Ücretsiz</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-shield"/></svg>Fiyat Yakında Artıyor</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-phone"/></svg>Native Ses + Telefon AI</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-layers"/></svg>2 Hazır İş Planı Dahil</div><div class="band-sep"></div>
+    <div class="band-item"><svg width="11" height="11"><use href="#i-diamond"/></svg>Inner Circle Kapısı</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-in">
+    <div>
+      <div class="hero-eyebrow"><div class="ew-dash"></div>Tüm Ekibinin Yerini Alan · 7/24 Çalışan AI Asistan</div>
+      <h1 class="hero-h1 cg">
+        İşini Yönetenin<br>
+        <span class="dim it">Artık Bir Makinesi Var.</span>
+      </h1>
+      <p class="hero-body">Web sitesinden reklam kreatifine, müşteri takibinden telefon görüşmelerine, rapordan içerik üretimine — <strong>aklına gelen her görevi yapan, 7 gün 24 saat durmayan</strong> bir AI ajan sistemi kuruyorsun.</p>
+      <div class="hero-btns">
+        <a href="#packages" class="btn-hero">Yerimi Ayırt <svg width="15" height="15"><use href="#i-arr"/></svg></a>
+        <a href="#features" class="btn-link">Programı incele <span class="link-arr"><svg width="14" height="14"><use href="#i-arr"/></svg></span></a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-it"><svg width="13" height="13" style="color:var(--soft)"><use href="#i-shield"/></svg>Güvenli ödeme</div>
+        <div class="trust-sep"></div>
+        <div class="trust-it"><svg width="13" height="13" style="color:var(--soft)"><use href="#i-zap"/></svg>Sınırlı kontenjan</div>
+        <div class="trust-sep"></div>
+        <div class="trust-it"><svg width="13" height="13" style="color:var(--soft)"><use href="#i-spark"/></svg>Fiyat yakında artıyor</div>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="glass fc fc1">
+        <div class="fc-icon"><svg width="18" height="18"><use href="#i-bot"/></svg></div>
+        <div class="fc-lbl">AI Ajan Durumu</div>
+        <div class="fc-val g">Aktif — 7/24</div>
+      </div>
+      <div class="glass fc fc2">
+        <div class="fc-icon"><svg width="18" height="18"><use href="#i-phone"/></svg></div>
+        <div class="fc-lbl">Son Çağrı</div>
+        <div class="fc-val">AI Kapattı</div>
+      </div>
+      <div class="glass fc fc3">
+        <div class="fc-icon"><svg width="18" height="18"><use href="#i-zap"/></svg></div>
+        <div class="fc-lbl">Bu Hafta</div>
+        <div class="fc-val">247 Görev</div>
+      </div>
+      <div class="glass fc fc4">
+        <div class="fc-icon"><svg width="18" height="18"><use href="#i-spark"/></svg></div>
+        <div class="fc-lbl">İlk Kayıt Bonusu</div>
+        <div class="fc-val">6 Ay CRM</div>
+      </div>
+      <div class="card-main">
+        <div class="cm-hd">
+          <div class="cm-name">AI Systems</div>
+          <div class="cm-live"><div class="cm-dot"></div><span class="cm-live-txt">Canlı</span></div>
+        </div>
+        <div class="cm-lbl">Bu Ay Otomasyon</div>
+        <div class="cm-val cg">1,240</div>
+        <div class="cm-rows">
+          <div class="cm-row"><span class="cm-rn">WhatsApp Yanıtları</span><span class="cm-tag on">Aktif</span></div>
+          <div class="cm-row"><span class="cm-rn">Reklam Kreatifleri</span><span class="cm-tag on">Aktif</span></div>
+          <div class="cm-row"><span class="cm-rn">Müşteri Telefonu</span><span class="cm-tag ai">AI Aradı</span></div>
+          <div class="cm-row"><span class="cm-rn">CRM Güncelleme</span><span class="cm-tag on">Aktif</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar rev">
+  <div class="stats-grid">
+    <div class="stat-cell"><div class="stat-n cg">300<span class="stat-u">+</span></div><div class="stat-l">İşletme deneyimi</div></div>
+    <div class="stat-cell"><div class="stat-n cg">350<span class="stat-u">+</span></div><div class="stat-l">Danışman yetiştirdim</div></div>
+    <div class="stat-cell"><div class="stat-n cg">10<span class="stat-u">+</span></div><div class="stat-l">Yıl sektör deneyimi</div></div>
+    <div class="stat-cell"><div class="stat-n cg">2026</div><div class="stat-l">AI'ın işi devraldığı yıl</div></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="prob-bg">
+  <div class="prob-in rev">
+    <div>
+      <div class="eyebrow">Problem</div>
+      <h2 class="sec-h cg">Hâlâ İşinin<br><span class="it">Kölesi misin?</span></h2>
+      <p>2026'da rakibin artık daha fazla çalışmıyor. <strong>Daha iyi sistem kuruyor.</strong> Sen hâlâ müşteri mesajlarını kendisini takip eder, teklifleri elle yazar, reklam kreatifleri için ajans beklerken — onun AI'ı tüm bunları saniyeler içinde yapıyor.</p>
+      <p>Sorun yetenek değil. <strong>Mimari eksikliği.</strong> Büyümek için daha fazla insan değil — işi senin yerine yapan bir sistem kurman gerekiyor.</p>
+      <div class="blockquote">
+        <p>"Çalışanın olmadığında duran bir iş — iş değil, tuzaktır."</p>
+        <div class="bq-attr">— Aydın Bars</div>
+      </div>
+    </div>
+    <div class="pain-list">
+      <div class="pain-row">
+        <div class="pain-n cg">01</div>
+        <div>
+          <h4>İşin sana bağlı, sen tatile çıkamazsın</h4>
+          <p>Telefonu kapatsan iş durur. Çalışan ayrılsa sistem çöker. Bu büyüme değil — kendini kilitlemek. En küçük karar bile senden geçiyor, bu operasyon değil kölelik.</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-n cg">02</div>
+        <div>
+          <h4>Lead geliyor, ama sistem yok — satış kaçıyor</h4>
+          <p>Potansiyel müşteri geliyor, ilk 5 dakikada cevap alamıyor, rakibin yakalamış. Takip sistemi olmayan bir pipeline, delik kovadan farksız. Her gün para kaybediyorsun, görmüyorsun.</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-n cg">03</div>
+        <div>
+          <h4>Aynı işi tekrar tekrar, ellerin yarına kadar</h4>
+          <p>Teklif yaz, sunum hazırla, reklam kopyası üret, email sekansı kur, içerik planla. Bunların %90'ı otomasyon. Hâlâ elle yapıyorsun çünkü "sistem kurmaya zaman yok." Sistem kurmaya zaman yoksa büyümeye de zaman yok.</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-n cg">04</div>
+        <div>
+          <h4>Ekip büyüyor ama kâr büyümüyor</h4>
+          <p>Daha fazla müşteri = daha fazla çalışan = daha fazla gider = aynı kâr marjı. Ölçeklenebilir sistem olmadan büyüme sadece riski artırır. Asıl ölçek — aynı ekiple 3 kat iş yapmaktır.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div id="features" class="section rev">
+  <div class="eyebrow">Eğitim İçeriği</div>
+  <h2 class="sec-h cg">Tek Sistemde <span class="cg-i">Her Şey</span></h2>
+  <p class="sec-b">ChatGPT nasıl kullanılır değil — kendi işin için çalışan <strong>tam fonksiyonlu AI ajan sistemi</strong> kuruyorsun. Sana sunuyor değil, seninle birlikte çalışıyor.</p>
+
+  <div class="feat-grid">
+    <!-- Wide dark: phone -->
+    <div class="feat-cell dk w2">
+      <div class="feat-tag"><svg width="11" height="11"><use href="#i-spark"/></svg>Öne Çıkan</div>
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-phone"/></svg></div>
+      <h3>Native Ses + Telefon AI Entegrasyonu</h3>
+      <p>Gerçek bir sesle telefon açan, Türkçe konuşan, müşteriyle müzakere eden ve randevu alan AI ajan. Sen uyurken satış kapanır.</p>
+      <div class="feat-note"><strong>Türkçe, Rusça, İngilizce</strong> destekli · Gerçek telefon numarası · Müşteri fark etmez</div>
+      <span class="feat-big cg">7/24</span>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-cpu"/></svg></div>
+      <h3>AI Ajan Mimarisi</h3>
+      <p>Sıfırdan komple sistem tasarımı. Hangi araçlar, nasıl bağlanır, iş akışı nasıl kurulur — adım adım.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-img"/></svg></div>
+      <h3>Reklam Kreatif Fabrikası</h3>
+      <p>Meta, Google, TikTok için AI reklam üretim sistemi. Tasarımcıya ve ajansa bağımlılık bitiyor.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-msg"/></svg></div>
+      <h3>WhatsApp + Telegram + Email</h3>
+      <p>Kişiselleştirilmiş otomatik yanıt ve satış sekans sistemi. Lead'den kapanışa her şey otomatik.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-globe"/></svg></div>
+      <h3>Web Sitesi & Landing Page</h3>
+      <p>AI ile dakikalar içinde yüksek dönüşümlü landing page. Sıfır kodlama bilgisi, sınırsız sayfa.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-ib"><svg width="22" height="22"><use href="#i-chart"/></svg></div>
+      <h3>AI Destekli CRM</h3>
+      <p>Lead'den satışa kadar AI yönetimli pipeline. Gerçek zamanlı takip, kâr analizi ve risk uyarısı.</p>
+    </div>
+
+    <!-- Full width: all capabilities block -->
+    <div class="feat-cell w3" style="background:var(--fog)">
+      <div class="feat-tag"><svg width="11" height="11"><use href="#i-bot"/></svg>AI Asistanın Yapabileceği Daha Fazlası</div>
+      <h3 style="margin-bottom:6px">Sana Saydırmadığımız Onlarca Görev</h3>
+      <p style="margin-bottom:22px;max-width:700px">Tam anlamıyla bir ekip gibi çalışan sistem. Aşağıdakiler sadece başlangıç — gerçek sınır sadece hayal gücün.</p>
+      <div class="cap-grid">
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-doc"/></svg>Teklif ve sözleşme taslağı hazırlama</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-report"/></svg>Haftalık/aylık performans raporu üretme</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-translate"/></svg>Çok dilli içerik ve çeviri otomasyonu</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-calendar"/></svg>Randevu ve takvim yönetimi</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-search"/></svg>Rakip analizi ve pazar araştırması</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-video"/></svg>Video script ve içerik planı yazma</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-mail"/></svg>Kişiselleştirilmiş soğuk email sekansları</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-chart"/></svg>Reklam performansı analizi ve optimizasyon önerileri</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-settings"/></svg>Iş akışı tasarımı ve SOP dokümantasyonu</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-msg"/></svg>Müşteri şikâyet yönetimi ve önceliklendirme</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-globe"/></svg>SEO içerik ve blog yazımı otomasyonu</div>
+        <div class="cap-item"><svg width="14" height="14" style="color:var(--soft);flex-shrink:0;margin-top:1px"><use href="#i-layers"/></svg>Onboarding süreçleri ve eğitim materyali</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEFORE / AFTER -->
+<div class="ba-bg">
+  <div class="ba-in rev">
+    <div class="eyebrow">Dönüşüm</div>
+    <h2 class="sec-h cg">Önce. <span class="cg-i">Sonra.</span></h2>
+    <div class="ba-panels">
+      <div class="ba-panel ba-before">
+        <div class="ba-head"><svg width="13" height="13"><use href="#i-ban"/></svg>Şu An — Sistem Yok</div>
+        <div class="ba-items">
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>Her teklif manuel yazılıyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>WhatsApp mesajlarına sen bakıyorsun</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>Reklam kreatifi için ajans bekliyorsun</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>CRM'i güncellemeyi unutuyorsun</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>Müşteri takibi düzensiz, satış kaçıyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>Gece 23:00'de mesaj okuyorsun</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:#c7c7cc"><use href="#i-x"/></svg></span>Büyümek için "daha fazla insan" diyorsun</div>
+        </div>
+      </div>
+      <div class="ba-panel ba-after">
+        <div class="ba-head"><svg width="13" height="13" style="color:rgba(255,255,255,.3)"><use href="#i-spark"/></svg>Sistem Kurulduktan Sonra</div>
+        <div class="ba-items">
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>AI teklifi 90 saniyede hazırlıyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>AI ajan WhatsApp'a 7/24 yanıt veriyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>Reklam kreatifleri otomatik üretiliyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>CRM gerçek zamanlı, otomatik güncelleniyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>Müşteri takibi AI pipeline'ında</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>Sen uyurken AI telefon açıyor</div>
+          <div class="ba-item"><span class="ba-ico"><svg width="15" height="15" style="color:rgba(255,255,255,.4)"><use href="#i-check"/></svg></span>Büyümek için sistem kuruyorsun</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PACKAGES — 2 packages only -->
+<div id="packages" class="section rev">
+  <div class="eyebrow">Paketler</div>
+  <h2 class="sec-h cg">Hangi Seviyeden <span class="cg-i">Başlıyorsun?</span></h2>
+  <p class="sec-b">Her iki paket de aynı yere götürüyor: <strong>çalışan, ölçeklenebilir bir sisteme.</strong> Giriş noktanı seç.</p>
+
+  <div class="pkg-grid">
+
+    <!-- AI Systems -->
+    <div class="pkg">
+      <div class="pkg-badge"><div class="pkg-dot"></div>Temel Program</div>
+      <div class="pkg-name cg">AI Systems</div>
+      <div class="pkg-desc">Tam AI ajan sistemi kur. İlk kayıt edenlere ekstra bonus dahil.</div>
+      <div class="pkg-line"></div>
+      <div class="pkg-feats">
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--dim)"><use href="#i-zap"/></svg></span>6 modül tam AI ajan eğitimi</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--dim)"><use href="#i-phone"/></svg></span>Native ses + telefon AI entegrasyonu</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--dim)"><use href="#i-msg"/></svg></span>WhatsApp · Telegram · Email otomasyonu</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--dim)"><use href="#i-img"/></svg></span>Reklam kreatif üretim sistemi</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--dim)"><use href="#i-chart"/></svg></span>AI destekli CRM kurulumu</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--soft)"><use href="#i-spark"/></svg></span>6 ay ücretsiz AI CRM (ilk kayıt bonusu)</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--soft)"><use href="#i-layers"/></svg></span>2 hazır iş planı + tam funnel</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:var(--soft)"><use href="#i-arr"/></svg></span>Inner Circle'a öncelikli başvuru hakkı</div>
+      </div>
+      <div class="pkg-cta">
+        <a href="odeme-ai-systems.html" class="pkg-btn">Yerimi Ayırt <svg width="13" height="13" style="margin-left:4px"><use href="#i-arr"/></svg></a>
+        <div class="pkg-note">Sınırlı kontenjan · Fiyat yakında artıyor</div>
+      </div>
+      <div class="discount-bar">
+        <div class="db-tag">Özel İndirim</div>
+        <div class="db-desc">Ajans.Start Elite kursiyerleri ve mezunları için özel fiyat mevcut. <a href="mailto:aydin@onedresulting.com" style="color:var(--black);font-weight:600;text-decoration:underline">Doğrudan iletişime geç →</a></div>
+      </div>
+    </div>
+
+    <!-- Inner Circle -->
+    <div class="pkg star">
+      <div class="pkg-badge"><div class="pkg-dot"></div>Üst Düzey · AI Systems Dahil</div>
+      <div class="pkg-name cg">Inner Circle</div>
+      <div class="pkg-desc">Ajans işletim sistemi. 6 ay birebir mentörlük + AI Systems programı içinde.</div>
+      <div class="pkg-line"></div>
+      <div class="pkg-feats">
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.5)"><use href="#i-layers"/></svg></span>AI Systems programının tamamı dahil</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.5)"><use href="#i-diamond"/></svg></span>6 aylık Ajans İşletim Sistemi (Phase 1+2)</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.5)"><use href="#i-zap"/></svg></span>9 haftalık Sprint Business Reality Show</div>
+        <div class="pkg-feat em"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.5)"><use href="#i-chart"/></svg></span>AI destekli BI Karar Motoru</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.35)"><use href="#i-phone"/></svg></span>Hot Seat Coaching her hafta</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.35)"><use href="#i-calendar"/></svg></span>Dubai Nisan Mastermind offline etkinliği</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.35)"><use href="#i-spark"/></svg></span>Kasım Burj Khalifa etkinliği</div>
+        <div class="pkg-feat"><span class="pkg-fi"><svg width="14" height="14" style="color:rgba(255,255,255,.35)"><use href="#i-shield"/></svg></span>Birebir Aydın Bars mentörlüğü</div>
+      </div>
+      <div class="pkg-cta">
+        <a href="odeme-inner-circle.html" class="pkg-btn">Başvur <svg width="13" height="13" style="margin-left:4px"><use href="#i-arr"/></svg></a>
+        <div class="pkg-note">Başvuru ile eleme süreci başlar · Aydın bizzat seçiyor</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VALUE TABLE -->
+<div class="val-bg">
+  <div class="val-in rev">
+    <div class="eyebrow" style="justify-content:center">Teklif</div>
+    <h2 class="sec-h cg">AI Systems İçin <span class="cg-i">Ne Alıyorsun?</span></h2>
+    <div class="val-table">
+      <div class="vt-row">
+        <div class="vt-l"><div class="vt-ico"><svg width="14" height="14"><use href="#i-check"/></svg></div><div><div class="vt-title">Tam AI Ajan Eğitimi — 6 Modül</div><div class="vt-desc">Web sitesi, reklam, WhatsApp, telefon, CRM, sunum</div></div></div>
+        <div class="vt-r"><div class="vt-old">2.800€</div><div class="vt-new">Dahil</div></div>
+      </div>
+      <div class="vt-row">
+        <div class="vt-l"><div class="vt-ico soft"><svg width="14" height="14"><use href="#i-spark"/></svg></div><div><div class="vt-title">6 Ay AI CRM Erişimi — İlk Kayıt Bonusu</div><div class="vt-desc">Dünyanın ilk AI destekli ajans karar motoru</div></div></div>
+        <div class="vt-r"><div class="vt-old">4.200€</div><div class="vt-new">Ücretsiz</div></div>
+      </div>
+      <div class="vt-row">
+        <div class="vt-l"><div class="vt-ico soft"><svg width="14" height="14"><use href="#i-layers"/></svg></div><div><div class="vt-title">2 Hazır İş Planı + Tam Funnel</div><div class="vt-desc">Email sekansları, front-end ve back-end dahil</div></div></div>
+        <div class="vt-r"><div class="vt-old">3.500€</div><div class="vt-new">Ücretsiz</div></div>
+      </div>
+      <div class="vt-row">
+        <div class="vt-l"><div class="vt-ico soft"><svg width="14" height="14"><use href="#i-diamond"/></svg></div><div><div class="vt-title">Inner Circle'a Öncelikli Başvuru Hakkı</div><div class="vt-desc">Eğitim içinden IC programına öncelikli geçiş imkânı</div></div></div>
+        <div class="vt-r"><div class="vt-old">Paha biçilemez</div><div class="vt-new">Açık</div></div>
+      </div>
+    </div>
+    <div class="val-bot">
+      <div><div class="vb-lbl">Toplam Değer</div><div class="vb-old">10.500€+</div></div>
+      <div class="vb-r">
+        <div class="sc-pill"><div class="sc-dot"></div>Sınırlı kontenjan · Fiyat yakında artıyor</div>
+        <a href="odeme-ai-systems.html" class="btn-white">Yerimi Ayırt <svg width="15" height="15"><use href="#i-arr"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div id="testimonials" class="section rev">
+  <div class="eyebrow">Başarılar</div>
+  <h2 class="sec-h cg">Sistemini Kuranlar <span class="cg-i">Konuşuyor</span></h2>
+  <div class="testi-cols">
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"Aydın sadece bilgi vermiyor — çalışan bir sistem kuruyor. Eğitimden 3 ay sonra ajansım benim yerime çalışıyor."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">Dijital Ajans Sahibi</div><div class="testi-title">İstanbul · 2026</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"WhatsApp otomasyonunu kurduğumda inanmamıştım — ama AI gerçekten müşteriyle konuştu ve toplantı aldı. Ben uyurken."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">Pazarlama Danışmanı</div><div class="testi-title">Ankara · 2025</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"AI Systems'ten Inner Circle'a geçtim. İki programı birlikte alan tek pişmanlığım, daha önce yapmamak."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">E-ticaret & Meta Ads</div><div class="testi-title">İzmir · 2025</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"Her hafta ajansıma reklam kreatifi için para veriyordum. Şimdi AI sistemi 3 dakikada hazırlıyor. Aylık ciddi tasarruf."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">Gayrimenkul Danışmanı</div><div class="testi-title">Dubai · 2025</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"Sprint'te 9 haftada sıfırdan 3 müşteri aldım. Hot seat coaching benim için kesinlikle dönüm noktasıydı."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">Yazılım Danışmanı</div><div class="testi-title">Varşova · 2025</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg><svg width="12" height="12"><use href="#i-star"/></svg></div>
+      <div class="testi-text">"CRM entegrasyonu en korktuğum şeydi. Kurdum, her lead otomatik takip ediliyor. Satışta ciddi artış var."</div>
+      <div class="testi-au">
+        <div class="testi-av"><div class="testi-av-placeholder"><svg width="14" height="14" style="color:rgba(255,255,255,.4)"><use href="#i-bot"/></svg></div></div>
+        <div><div class="testi-role">SaaS Ajans Kurucusu</div><div class="testi-title">Türkiye · 2025</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOR WHO -->
+<div class="fw-bg">
+  <div class="section rev">
+    <div class="eyebrow">Eleme</div>
+    <h2 class="sec-h cg">Bu Program <span class="cg-i">Kimin İçin?</span></h2>
+    <div class="fw-grid">
+      <div class="fw yes">
+        <div class="fw-head"><svg width="13" height="13"><use href="#i-ccheck"/></svg>Senin İçin</div>
+        <div class="fw-items">
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>Ajans sahibi veya danışmansın, büyümek istiyorsun</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>Tekrarlayan işleri otomatikleştirmek istiyorsun</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>AI'yi gerçek iş operasyonunda kullanmak istiyorsun</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>Sadece izlemezsin — uygularsın</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>Uzun vadeli düşünüyorsun</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:rgba(255,255,255,.3);flex-shrink:0;margin-top:1px"><use href="#i-arr"/></svg>Sonucu görmek istiyorsun, bahanelerin yok</div>
+        </div>
+      </div>
+      <div class="fw no">
+        <div class="fw-head"><svg width="13" height="13"><use href="#i-ban"/></svg>Sana Göre Değil</div>
+        <div class="fw-items">
+          <div class="fw-item"><svg width="15" height="15" style="color:var(--rule);flex-shrink:0;margin-top:1px"><use href="#i-x"/></svg>"Bir gecede sonuç" bekliyorsan</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:var(--rule);flex-shrink:0;margin-top:1px"><use href="#i-x"/></svg>Uygulamadan sadece izleyeceksen</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:var(--rule);flex-shrink:0;margin-top:1px"><use href="#i-x"/></svg>Sorumluluk almak yerine bahane üretiyorsan</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:var(--rule);flex-shrink:0;margin-top:1px"><use href="#i-x"/></svg>Disiplin konusunda kendinle sorunun varsa</div>
+          <div class="fw-item"><svg width="15" height="15" style="color:var(--rule);flex-shrink:0;margin-top:1px"><use href="#i-x"/></svg>Sabırsızsın ve süreci istemiyorsun</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div id="faq" class="section rev">
+  <div style="text-align:center">
+    <div class="eyebrow" style="justify-content:center">Sık Sorulan Sorular</div>
+    <h2 class="sec-h cg">Aklındaki <span class="cg-i">Soruları</span> Yanıtlıyorum</h2>
+  </div>
+  <div class="faq-in">
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">Teknik veya AI bilgim yok, bu program bana uygun mu?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">Evet. Eğitim tamamen sıfırdan başlıyor. Teknik bilgi gerekmez — gerekli olan sadece uygulamak isteği. Her modül adım adım kurulum içeriyor. Daha önce hiç kod yazmamış katılımcılar sistemi başarıyla kurdu.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">AI CRM sistemi gerçekten çalışıyor mu?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">Kendi ajansımda aktif kullandığım, geliştirmeye devam ettiğim bir yapı. Dashboard değil karar motoru — lead'den satışa gerçek zamanlı takip, AI performans analizi ve risk uyarısı içeriyor. İlk kayıt edenlere 6 ay erişim veriyorum.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">AI Systems ile Inner Circle arasındaki fark ne?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">AI Systems — AI ajan sistemini kurma eğitimi. Kendi başına tam ve bağımsız bir program. Inner Circle, AI Systems'i içine alan üst düzey bir program: Ajans İşletim Sistemi mimarisi, 6 ay birebir mentörlük, Sprint programı ve offline etkinlikler dahil.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">Kontenjan dolunca ne olacak?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">Kayıtlar kapanacak. AI CRM bonusu sona erecek. Fiyat artacak. Bekleme listesine alınacaksın ama aynı şartlar bir sonraki dönem garanti edilmez.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">Ajans.Start Elite mezunu değilsem başvurabilir miyim?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">Evet. AI Systems ve Inner Circle herkese açık. Ajans.Start Elite kursiyerleri ve mezunları için ise özel indirim mevcut. Detaylar için doğrudan iletişime geç: aydin@onedresulting.com</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="faq(this)">Ajans sahibi olmadan da başvurabilir miyim?<div class="faq-tog"><svg width="14" height="14"><use href="#i-plus"/></svg></div></div>
+      <div class="faq-a"><div class="faq-ab">Evet. Danışman, freelancer veya kendi işini kurmak isteyen biri de alabilir. AI ajan sistemi hem mevcut hem de kuruluş aşamasındaki yapıya entegre edilebilir.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
+<div id="apply">
+  <div class="cta rev">
+    <div>
+      <div class="cta-ey">Karar Anı</div>
+      <h2 class="cg">Şimdi Değilse,<br><span class="it">Ne Zaman?</span></h2>
+      <p>2026'da AI bu işi herkes biliyor olacak. Fark yaratmak için <strong>şimdi</strong> sistemi kuranlar kazanacak. <strong>Sınırlı kontenjan. Bir kez.</strong></p>
+    </div>
+    <div class="cta-r">
+      <a href="#packages" class="btn-white">Paketleri İncele <svg width="15" height="15"><use href="#i-arr"/></svg></a>
+      <div class="cta-note">Güvenli ödeme · İlk kayıt bonusları dahil</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  <div>
+    <div class="foot-bn">
+      <div style="width:30px;height:30px;background:var(--black);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" style="color:white"><use href="#i-zap"/></svg></div>
+      <span>AI Systems</span><sub>by Aydın Bars</sub>
+    </div>
+    <div class="foot-tag">AI ajan sistemi kurmayı öğreten, ajans sahiplerini ve danışmanları sisteme taşıyan eğitim ve mentörlük platformu.</div>
+    <div class="foot-soc">
+      <a class="fsoc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="fsoc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg></a>
+      <a class="fsoc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+      <a class="fsoc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+    </div>
+  </div>
+  <div class="foot-col">
+    <h5>Programlar</h5>
+    <ul>
+      <li><a href="#">AI Systems</a></li>
+      <li><a href="#">Inner Circle</a></li>
+      <li><a href="#">Sprint Programı</a></li>
+      <li><a href="#">Hakkımda</a></li>
+    </ul>
+  </div>
+  <div class="foot-col">
+    <h5>Şirket</h5>
+    <div class="foot-company">
+      <strong>BARS HUB TECHNOLOGY — FZCO</strong><br>
+      Dubai Digital Park<br>
+      Dubai Silicon Oasis Building A1<br>
+      3641379065<br>
+      Dubai, United Arab Emirates<br><br>
+      <a href="mailto:aydin@onedresulting.com">aydin@onedresulting.com</a>
+    </div>
+  </div>
+</div>
+<div class="foot-base">
+  <span>© 2026 Aydın Bars · BARS HUB TECHNOLOGY FZCO. Tüm hakları saklıdır.</span>
+  <span>Sistem Kuranların.</span>
+</div>
+<div class="wm"><div class="wm-txt cg">AI Systems</div></div>
+<div style="background:var(--black)"><div class="wm-base"><span>© 2026 AI Systems by Aydın Bars</span><span>Dubai Silicon Oasis · UAE</span></div></div>
+
+<script>
+document.querySelectorAll('.rev').forEach(el=>{
+  new IntersectionObserver(([e])=>{ if(e.isIntersecting){ el.classList.add('on'); } },{threshold:.08}).observe(el);
+});
+function faq(el){
+  const it=el.parentElement,open=it.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!open) it.classList.add('open');
+}
+</script>
+</body>
+</html>
